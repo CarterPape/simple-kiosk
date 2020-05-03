@@ -1,7 +1,13 @@
 import mitmproxy
 
-def response(flow: mitmproxy.http.HTTPFlow) -> None:
-    if "X-Frame-Options" in flow.response.headers:
-        flow.response.headers.pop("X-Frame-Options")
-    if "Content-Security-Policy" in flow.response.headers:
-        flow.response.headers.pop("Content-Security-Policy")
+def requestheaders(flow: mitmproxy.http.HTTPFlow) -> None:
+    for each_key in flow.request.headers:
+        if each_key.casefold().startswith("sec-".casefold()):
+            print(f"dropping {each_key}")
+            flow.request.headers.pop(each_key)
+
+def responseheaders(flow: mitmproxy.http.HTTPFlow) -> None:
+    if "x-frame-options" in flow.response.headers:
+        flow.response.headers.pop("x-frame-options")
+    if "content-security-policy" in flow.response.headers:
+        flow.response.headers.pop("content-security-policy")

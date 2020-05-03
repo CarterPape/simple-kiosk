@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js" integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs=" crossorigin="anonymous"></script>
+        <style>
+            iframe {
+                width: 100%;
+                height: 100vh;
+                position: absolute;
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+            }
+            iframe, body, html {
+                padding: 0;
+                margin: 0;
+                border: 0;
+            }
+            .hiding {
+                opacity: 0;
+                transform: scale(1.5, 1.5);
+                transition-delay: 1s;
+                transition-duration: 2s;
+                transition-timing-function: ease-in;
+            }
+        </style>
+        <script>
+            var urls = [
+                "https://www.nytimes.com/search?dropmab=false&query=%22Moab%22%2C%20Utah&sort=newest",
+                "https://www.sltrib.com/search/Moab/?q=Moab",
+                "https://www.ksl.com/?sid=53574&nid=208&cx=partner-pub-3771868546990559%3Ar955z1-wmf4&cof=FORID%3A9&ie=ISO-8859-1&sa=Search&searchtype=kslcom&x=15&y=19&q=%22Moab%22#gsc.tab=0&gsc.q=%22Moab%22&gsc.sort=date&gsc.ref=more%3Aksl_news",
+                "https://kutv.com/search?find=Moab",
+                "https://www.washingtonpost.com/newssearch/?query=Moab,%20Utah&sort=Date&datefilter=All%20Since%202005&contenttype=Article&contenttype=Video&contenttype=Photo%20Gallery&contenttype=Discussion&contenttype=Live_discussion",
+                "https://calendar.google.com/calendar/r/customweek",
+                "https://moabtimes.com",
+            ]
+            var currentURLIndex = 0;
+            var masterInterval;
+            
+            function removeAndReplaceIframe(event) {
+                $(event.target).remove();
+                loadNextURL();
+            }
+            
+            function loadNextURL() {
+                $(
+                    "<iframe/></iframe>",
+                    {
+                        src: urls[currentURLIndex],
+                    },
+                ).prependTo(
+                    "body",
+                ).on(
+                    "transitionend",
+                    removeAndReplaceIframe,
+                );
+                
+                currentURLIndex = (currentURLIndex + 1) % urls.length;
+            }
+            
+            function startOneIframeCycle() {
+                $("iframe").last().addClass("hiding");
+            }
+            
+            $(document).ready(function() {
+                loadNextURL();
+                loadNextURL();
+                masterInterval = setInterval(startOneIframeCycle, 20000);
+            });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

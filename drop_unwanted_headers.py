@@ -3,7 +3,6 @@ import mitmproxy
 def requestheaders(flow: mitmproxy.http.HTTPFlow) -> None:
     for each_key in flow.request.headers:
         if each_key.casefold().startswith("sec-".casefold()):
-            print(f"dropping {each_key}")
             flow.request.headers.pop(each_key)
 
 def responseheaders(flow: mitmproxy.http.HTTPFlow) -> None:
